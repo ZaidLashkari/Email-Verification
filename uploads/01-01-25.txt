@@ -1,0 +1,219 @@
+01-01-25
+# # from django.db import models
+# # from django.contrib.auth.models import AbstractUser
+# # from django.contrib.auth import get_user_model
+# # from django.conf import settings
+# # import random
+# # from django.utils import timezone
+# # from django.contrib.auth.models import User
+# # from django.db.models.signals import post_save
+# # from django.dispatch import receiver
+# # from otp_app.models import UserProfile
+
+# # # Create your models here.
+
+# # class CustomUser(AbstractUser):
+# #     email = models.EmailField(unique=True)
+    
+# #     USERNAME_FIELD = ("email")
+# #     REQUIRED_FIELDS = ["username"]
+    
+# #     def _str__(self):
+# #         return self.email
+    
+# # class OtpToken(models.Model):
+# #     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='otp_token')
+# #     otp_code = models.CharField(max_length=6, blank=True, editable=False)
+# #     otp_expires_at = models.DateTimeField()
+
+# #     def save(self, *args, **kwargs):
+# #         # Generate OTP code if not already set
+# #         if not self.otp_code:
+# #             self.otp_code = str(random.randint(100000, 999999))  # 6-digit OTP
+# #         super().save(*args, **kwargs)
+
+# #     def is_expired(self):
+# #         # Check if the OTP has expired
+# #         return timezone.now() > self.otp_expires_at
+
+# #     def __str__(self):
+# #         return f"OTP for {self.user.username} - Expires at {self.otp_expires_at}"
+    
+# # class UserProfile(models.Model):
+# #     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+# #     credits = models.IntegerField(default=0)
+
+# #     def __str__(self):
+# #         return f"Profile for {self.user.email}"
+
+
+# # class UserActivity(models.Model):
+# #     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+# #     activity = models.TextField()
+# #     timestamp = models.DateTimeField(auto_now_add=True)
+
+# #     def __str__(self):
+# #         return f"Activity for {self.user.email} - {self.timestamp}"
+
+
+# # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# # def create_user_profile(sender, instance, created, **kwargs):
+# #     if created:
+# #         # Import here to avoid circular import issue
+# #         from .models import UserProfile
+# #         # Create a UserProfile instance for the new user
+# #         UserProfile.objects.create(user=instance)
+
+# # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# # def save_user_profile(sender, instance, **kwargs):
+# #     instance.userprofile.save()
+
+
+
+# from django.db import models
+# from django.contrib.auth.models import AbstractUser
+# from django.conf import settings
+# import random
+# from django.utils import timezone
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
+
+# # Create your models here.
+
+# class CustomUser(AbstractUser):
+#     email = models.EmailField(unique=True)
+    
+#     USERNAME_FIELD = ("email")
+#     REQUIRED_FIELDS = ["username"]
+    
+#     def __str__(self):
+#         return self.email
+    
+# class OtpToken(models.Model):
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='otp_token')
+#     otp_code = models.CharField(max_length=6, blank=True, editable=False)
+#     otp_expires_at = models.DateTimeField()
+
+#     def save(self, *args, **kwargs):
+#         # Generate OTP code if not already set
+#         if not self.otp_code:
+#             self.otp_code = str(random.randint(100000, 999999))  # 6-digit OTP
+#         super().save(*args, **kwargs)
+
+#     def is_expired(self):
+#         # Check if the OTP has expired
+#         return timezone.now() > self.otp_expires_at
+
+#     def __str__(self):
+#         return f"OTP for {self.user.username} - Expires at {self.otp_expires_at}"
+    
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     credits = models.IntegerField(default=0)
+
+#     def __str__(self):
+#         return f"Profile for {self.user.email}"
+
+
+# class UserActivity(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     activity = models.TextField()
+#     timestamp = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"Activity for {self.user.email} - {self.timestamp}"
+
+# # Signal to create UserProfile
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         # Import UserProfile here to avoid circular import
+#         from .models import UserProfile
+#         # Create UserProfile instance for the new user
+#         UserProfile.objects.create(user=instance)
+
+# # Signal to save UserProfile after User is saved
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.userprofile.save()
+
+# class CreditRequest(models.Model):
+#     STATUS_CHOICES = [
+#         ('PENDING', 'Pending'),
+#         ('APPROVED', 'Approved'),
+#         ('REJECTED', 'Rejected'),
+#     ]
+
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="credit_requests")
+#     requested_credits = models.IntegerField()
+#     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+#     timestamp = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"{self.user.email} - {self.requested_credits} credits ({self.status})"
+    
+
+#01-01-25
+# from django.db import models
+# from django.contrib.auth.models import AbstractUser
+# from django.conf import settings
+# import random
+# from django.utils import timezone
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
+
+# # Create your models here.
+
+# class CustomUser(AbstractUser):
+#     email = models.EmailField(unique=True)
+    
+#     USERNAME_FIELD = ("email")
+#     REQUIRED_FIELDS = ["username"]
+    
+#     def __str__(self):
+#         return self.email
+
+
+# class OtpToken(models.Model):
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='otp_token')
+#     otp_code = models.CharField(max_length=6, blank=True, editable=False)
+#     otp_expires_at = models.DateTimeField()
+
+#     def save(self, *args, **kwargs):
+#         # Generate OTP code if not already set
+#         if not self.otp_code:
+#             self.otp_code = str(random.randint(100000, 999999))  # 6-digit OTP
+#         super().save(*args, **kwargs)
+
+#     def is_expired(self):
+#         # Check if the OTP has expired
+#         return timezone.now() > self.otp_expires_at
+
+#     def __str__(self):
+#         return f"OTP for {self.user.username} - Expires at {self.otp_expires_at}"
+
+
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     credits = models.IntegerField(default=0)
+
+#     def __str__(self):
+#         return f"Profile for {self.user.email}"
+
+
+# class UserActivity(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     activity = models.TextField()
+#     timestamp = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"Activity for {self.user.email} - {self.timestamp}"
+
+# # Signal to create UserProfile
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         # Import UserProfile here to avoid circular import
+#         from .models import UserProfile
+#         # Create UserProfile instance for the new user
+#         UserProfile.objects.create(user=instance)

@@ -1,0 +1,215 @@
+{% extends "base.html" %}    
+
+{% block content %}
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        background-color: rgb(255, 255, 255);
+        color: #212529;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container {
+        background-color: #fff;
+        border-radius: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 2rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #e9ecef;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        padding: 10px 15px;
+        background-color: #f8f9fa;
+        transition: background-color 0.2s ease;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9ecef;
+    }
+
+    .badge {
+        padding: 5px 10px;
+        font-size: 0.875rem;
+        border-radius: 5px;
+    }
+
+    .text-muted {
+        font-size: 0.9rem;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+    }
+
+    /* Align the form to the left */
+    .form-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .form-container .card-body {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    form {
+        text-align: left;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        .card-body {
+            padding-left: 0;
+        }
+
+        .btn-primary {
+            width: 100%;
+        }
+
+        .list-group-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .list-group-item .badge {
+            margin-top: 5px;
+        }
+    }
+</style>
+
+<div id="main-content" class="container mt-5 p-4 min-vh-100">
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h2 class="h2">Bulk Upload Form</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ bulk_form.as_p }}
+                <button type="submit" name="bulk_submit" class="btn btn-success">Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h2">Upload History</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>File Name</th>
+                        <th>Uploaded At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                        <tr>
+                            <td>{{ file.user.username }}</td>
+                            <td>{{ file.file.name|slice:":-4" }}</td>
+                            <td>{{ file.uploaded_at|date:"Y-m-d H:i:s" }}</td> <!-- Time is displayed in IST -->
+                            <td>
+                                <a href="{{ file.file.url }}" class="btn btn-primary btn-sm" download>Download</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination controls below the result card -->
+        <div class="d-flex justify-content-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if files.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ files.previous_page_number }}">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                    {% endif %}
+    
+                    {% for num in files.paginator.page_range %}
+                        <li class="page-item {% if files.number == num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+    
+                    {% if files.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ files.next_page_number }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

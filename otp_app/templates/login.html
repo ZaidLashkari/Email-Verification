@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    form {
+        text-align: left;
+    }
+
+    /* Center the button */
+    .btn-center {
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-center .btn-primary {
+        text-align: center;
+    }
+    p{
+        text-align: center;
+        padding:10px;
+    }
+</style>
+
+<div class="p-4 min-vh-100">
+    <h2><strong>Login</strong></h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input class="form-control" type="email" name="username" placeholder="Enter email address" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input class="form-control" type="password" name="password" placeholder="Enter password" required>
+        </div>
+
+        <!-- Wrap the button in a div with a flexbox class -->
+        <div class="btn-center">
+            <button class="btn btn-primary">Login to your account</button>
+        </div>
+        <div>
+            <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+        </div>
+
+        
+    </form>
+</div>
+{% endblock content %} 

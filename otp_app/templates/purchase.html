@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .card-header {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container mt-5 p-4 min-vh-100">
+    <div id="main-content" class="jumbotron jumbotron-fluid rounded bg-white border-0 shadow-sm px-4 py-3 card mb-4">
+        <div class="card-header bg-success text-white">
+            <h2 class="h2">Plan Requests</h2>
+        </div>
+        <div class="container">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Requested Plan</th>
+                        <th>Timestamp</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in user.planrequest_set.all %}
+                        <tr>
+                            <td>
+                                {% if request.plan %}
+                                    {{ request.plan.name }}
+                                {% else %}
+                                    Custom Plan ({{ request.requested_credits }} Credits)
+                                {% endif %}
+                            </td>
+                            <td>{{ request.timestamp|date:"Y-m-d H:i" }}</td>
+                            <td>{{ request.status }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center">No plan requests made yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="{% url 'request_plan' %}" class="btn btn-primary mt-2">Request a New Plan</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

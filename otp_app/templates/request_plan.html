@@ -1,0 +1,485 @@
+{% extends "base.html" %}
+{% comment %} 
+{% block content %}
+<style>
+    form{
+        text-align:left;
+    }
+    .btn {
+        width: 100%; /* Full-width button */
+        padding: 10px; /* Inner padding */
+        font-size: 16px; /* Larger font for readability */
+        background-color: #007bff; /* Blue background */
+        color: white; /* White text */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s ease; /* Smooth hover transition */
+    }
+
+    .btn:hover {
+        background-color:rgb(16, 105, 201); /* Darker blue on hover */
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px auto;
+        max-width: 1000px;
+        text-align: center;
+      
+    }
+    /* Custom Media Queries */
+    @media (max-width: 768px) {
+        .container {
+            max-width: 90%;
+            padding: 20px;
+        } 
+    } 
+
+</style> 
+
+<div id="main-content" class="container">
+    <h2>Request a Plan</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="plan" class="form-label">Select a Plan:</label>
+            <select name="plan_id" id="plan" class="form-control">
+                {% for plan in plans %}
+                    <option value="{{ plan.id }}">{{ plan.name }} - {{ plan.credits }} credits - ${{ plan.price }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn">Request Plan</button>
+    </form>
+    {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+</div>
+{% endblock content %} {% endcomment %}
+
+
+{% comment %} 
+16-02-25 {% endcomment %}
+
+{% comment %} {% block content %}
+<style>
+    .pricing-header {
+        text-align: center;
+        padding: 3rem 0;
+        background: linear-gradient(to right, #2563eb, #1d4ed8);
+        color: white;
+        margin-bottom: 3rem;
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+    }
+
+    .pricing-header h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .plan-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        margin-bottom: 2rem;
+        height: 450px;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+    }
+
+    .plan-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    .plan-card .card-body {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .price {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #2563eb;
+        margin: 1.5rem 0;
+    }
+
+    .credits {
+        font-size: 1.25rem;
+        color: #10b981;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .plan-features {
+        margin: 1.5rem 0;
+    }
+
+    .plan-features li {
+        color: #64748b;
+        margin-bottom: 0.75rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .plan-features li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: bold;
+    }
+
+    .btn-select-plan {
+        background: #2563eb;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        border: none;
+        margin-top: auto;
+    }
+
+    .btn-select-plan:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .history-section {
+        margin-top: 4rem;
+        padding: 2rem;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    .plan-card {
+        transition: transform 0.3s;
+        margin-bottom: 20px;
+        height: 450px;
+        display: flex;
+        flex-direction: column;
+    }
+    .plan-card .card-body {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .plan-card form {
+        margin-top: auto;
+    }
+    .plan-card:hover {
+        transform: translateY(-5px);
+    }
+    .price {
+        font-size: 2.5rem;
+        color: #007bff;
+        font-weight: bold;
+        margin: 20px 0;
+    }
+    .credits {
+        font-size: 1.5rem;
+        color: #28a745;
+        margin: 15px 0;
+    }
+    .card-body {
+        padding: 2rem;
+    }
+    .plan-features {
+        margin: 20px 0;
+        text-align: left;
+        color: #666;
+    }
+    .plan-features ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .plan-features li {
+        margin: 10px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+    .plan-features li:before {
+        content: "✓";
+        color: #28a745;
+        position: absolute;
+        left: 0;
+    }
+    .content-wrapper {
+        min-height: calc(100vh - 60px); /* 60px is footer height */
+        padding-bottom: 20px;
+    }
+</style>
+<div class="page-container">
+    <div class="content-wrapper">
+        <!-- Plans Section -->
+        <div class="pricing-header">
+            <h2>Choose Your Plan</h2>
+            <p class="lead">Select the perfect plan for your verification needs</p>
+        </div>
+        <div id="main-content" class="container">
+            <div class="row">
+                {% for plan in plans %}
+                <div class="col-md-4">
+                    <div class="card plan-card shadow">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">{{ plan.name }}</h3>
+                            <p class="price">${{ plan.price }}</p>
+                            <p class="credits">{{ plan.credits }} Credits</p>
+                            <div class="plan-features">
+                                <ul>
+                                    <li>24/7 Support</li>
+                                    <li>Secure Processing</li>
+                                </ul>
+                            </div>
+                            <form method="post" action="{% url 'request_plan' %}" class="mt-auto">
+                                {% csrf_token %}
+                                <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                                <button type="submit" class="btn btn-primary btn-sm w-100">Select Plan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %} {% endcomment %}
+
+
+{% block content %}
+<style>
+    .pricing-header {
+        text-align: center;
+        padding: 3rem 0;
+        background: linear-gradient(to right, #2563eb, #1d4ed8);
+        color: white;
+        margin-bottom: 3rem;
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+    }
+
+    .pricing-header h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .plan-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        margin-bottom: 2rem;
+        height: 450px;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .plan-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    .plan-card .card-body {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .price {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #2563eb;
+        margin: 1.5rem 0;
+    }
+
+    .credits {
+        font-size: 1.25rem;
+        color: #10b981;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .plan-features ul {
+        list-style: none; /* Removes default bullets */
+        padding-left: 0; /* Removes left padding */
+    }
+    
+    .plan-features li {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+    
+    .plan-features li:before {
+        content: "✓"; /* Adds a checkmark */
+        position: absolute;
+        left: 0;
+        color: #10b981; /* Green checkmark */
+        font-weight: bold;
+    }
+    
+
+    .btn-select-plan {
+        background: #2563eb;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        border: none;
+        margin-top: auto;
+    }
+
+    .btn-select-plan:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .custom-plan-container {
+        text-align: center;
+        margin-top: 3rem;
+        padding: 2rem;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    /* Slider Styling */
+    .slider-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        width: 80%;
+        height: 8px;
+        background: #e2e8f0;
+        border-radius: 5px;
+        outline: none;
+        transition: background 0.3s;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #2563eb;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .slider::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+    }
+
+    .slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #2563eb;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .custom-plan-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2563eb;
+        margin-top: 0.5rem;
+    }
+</style>
+
+<div class="page-container">
+    <div class="content-wrapper">
+        <div class="pricing-header">
+            <h2>Choose Your Plan</h2>
+            <p class="lead">Select the perfect plan for your verification needs</p>
+        </div>
+        <div id="main-content" class="container">
+            <div class="row">
+                {% for plan in plans %}
+                <div class="col-md-4">
+                    <div class="card plan-card shadow">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">{{ plan.name }}</h3>
+                            <p class="price">${{ plan.price }}</p>
+                            <p class="credits">{{ plan.credits }} Credits</p>
+                            <div class="plan-features">
+                                <ul>
+                                    <li>24/7 Support</li>
+                                    <li>Secure Processing</li>
+                                </ul>
+                            </div>
+                            <form method="post" action="{% url 'request_plan' %}" class="mt-auto">
+                                {% csrf_token %}
+                                <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                                <button type="submit" class="btn btn-primary btn-sm w-100">Select Plan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Custom Plan Section -->
+            <div class="custom-plan-container">
+                <h3>Create Your Own Plan</h3>
+                <p>Adjust the slider to customize your plan</p>
+                <div class="slider-container">
+                    <input type="range" id="custom-plan-slider" class="slider" min="10" max="500" step="10" value="50">
+                    <p>Price: <span class="custom-plan-value" id="custom-plan-price">$50</span></p>
+                    <p>Credits: <span class="custom-plan-value" id="custom-plan-credits">50 Credits</span></p>
+                </div>
+                <form method="post" action="{% url 'request_plan' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="custom_price" id="custom-price-input" value="50">
+                    <input type="hidden" name="custom_credits" id="custom-credits-input" value="50">
+                    <button type="submit" class="btn btn-primary">Select Custom Plan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const slider = document.getElementById("custom-plan-slider");
+    const priceDisplay = document.getElementById("custom-plan-price");
+    const creditsDisplay = document.getElementById("custom-plan-credits");
+    const priceInput = document.getElementById("custom-price-input");
+    const creditsInput = document.getElementById("custom-credits-input");
+
+    slider.addEventListener("input", function() {
+        let value = this.value;
+        priceDisplay.textContent = `$${value}`;
+        creditsDisplay.textContent = `${value} Credits`;
+        priceInput.value = value;
+        creditsInput.value = value;
+    });
+</script>
+{% endblock content %}
+

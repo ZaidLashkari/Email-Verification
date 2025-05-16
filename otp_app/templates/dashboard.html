@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% comment %} 15-01-25 {% endcomment %}
+
+{% load static %}
+
+{% if user.is_superuser %}
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-warning mb-3">Admin Dashboard</a>
+{% endif %}
+
+{% block content %}
+<style>
+    /* General Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color:rgb(255, 255, 255);
+    color: #343a40;
+    margin: 0;
+    padding: 0;
+}
+
+#main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styling */
+h1 {
+    font-size: 2.5rem;
+    color:rgb(75, 148, 226);
+    text-align: center;
+}
+
+h2,
+h3 {
+    font-size: 1.8rem;
+    color: #343a40;
+}
+
+p.lead {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+/* Jumbotron Styling */
+.jumbotron {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.jumbotron h2,
+.jumbotron h3 {
+    
+    color: #007bff;
+}
+
+.jumbotron ul {
+    padding: 0;
+    list-style: none;
+}
+
+.jumbotron ul li {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+/* Button Styling */
+.btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 0.3rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #343a40;
+    border: none;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+/* Table Styling (if uncommented in HTML) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+table thead th {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+table tbody td {
+    padding: 10px;
+    border: 1px solid #e9ecef;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+/* Footer Section (optional) */
+footer {
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 30px;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2,
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    p.lead {
+        font-size: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+</style>
+
+<div id="main-content" class="p-4 min-vh-100">
+    <h1 class="mb-4" style="color: #007bff;">Welcome, {{ user.username }}</h1>
+
+    <!-- Credits Section -->
+    <div class="jumbotron jumbotron-fluid rounded bg-white border-0 shadow-sm mb-4 px-4 py-3">
+        <div class="container">
+            <h2 class="display-6 mb-2 text-primary"><b>Credits</b></h2>
+            <p class="lead text-muted">
+                {% if user_profile.credits %}
+                    {{ user_profile.credits }} credits available.
+                {% else %}
+                    No credits available.
+                {% endif %}
+            </p>
+            {% if approved_plan_request %}
+                <p class="text-muted">
+                    <strong>Recent Plan:</strong> 
+                    
+                        {% if approved_plan_request.plan %}
+                            {{ approved_plan_request.plan.name }}
+                        {% else %}
+                            Custom Plan ({{ approved_plan_request.requested_credits }} Credits)
+                        {% endif %}
+                    
+                </p>
+            {% else %}
+                <p class="text-muted">No active plan.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+
+    <!-- Activity Section -->
+    <div class="jumbotron jumbotron-fluid rounded bg-white border-0 shadow-sm mb-4 px-4 py-3">
+        <div class="container">
+            <h3 class="display-6 mb-2 text-primary"><b>Activity</b></h3>
+            <ul class="list-unstyled">
+                {% for activity in activities %}
+                    <li><strong>{{ activity.activity }}</strong> on {{ activity.timestamp|date:"Y-m-d H:i" }}</li>
+                {% empty %}
+                    <li>No recent activities.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
