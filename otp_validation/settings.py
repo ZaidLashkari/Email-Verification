@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'otp_app.apps.OtpAppConfig'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
