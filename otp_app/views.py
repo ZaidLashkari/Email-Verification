@@ -367,69 +367,7 @@ def bulk_upload_view(request):
 
 #15-01-25 9.16.pm
 
-# Utility function to update plan request status
-# 16-02-25
-# @login_required
-# @user_passes_test(is_admin)
-# def approve_plan_request_view(request, request_id):
-#     try:
-#         planrequest_set = PlanRequest.objects.get(id=request_id)
-#     except PlanRequest.DoesNotExist:
-#         messages.error(request, "The plan request was not found.")
-#         return redirect('admin_dashboard')
 
-#     if planrequest_set.status == 'PENDING':
-#         planrequest_set.status = 'APPROVED'
-#         planrequest_set.save()
-
-#         # Add credits to the user's profile when the plan is approved
-#         user_profile = get_or_create_user_profile(planrequest_set.user)
-#         user_profile.credits += planrequest_set.plan.credits
-#         #user_profile.credits_expiry = now()+timedelta(days=60)
-#         user_profile.save()
-
-#         messages.success(request, f"Plan request for {planrequest_set.plan.name} from {planrequest_set.user.email} has been approved.")
-#     return redirect('admin_dashboard')
-
-
-
-# @login_required
-# @user_passes_test(is_admin)
-# def reject_plan_request_view(request, request_id):
-#     try:
-#         plan_request = PlanRequest.objects.get(id=request_id)
-#     except PlanRequest.DoesNotExist:
-#         messages.error(request, "The plan request was not found.")
-#         return redirect('admin_dashboard')
-
-#     if plan_request.status == 'PENDING':
-#         plan_request.status = 'REJECTED'
-#         plan_request.save()
-#         messages.success(request, f"Plan request from {plan_request.user.email} has been rejected.")
-#     return redirect('admin_dashboard')
-
-
-
-# # Handle requesting a plan
-# def request_plan(request):
-#     if request.method == "POST":
-#         plan_id = request.POST.get("plan_id")
-
-#         if not plan_id:
-#             return render(request, "request_plan.html", {"error": "Please select a valid plan."})
-
-#         plan = get_object_or_404(Plan, id=plan_id)
-
-#         # Create a plan request for the user
-#         PlanRequest.objects.create(user=request.user, plan=plan)
-#         messages.success(request, f"You have requested the {plan.name} plan.")
-#         return redirect("dashboard")  # Redirect to the user dashboard after submitting the request
-
-#     plans = Plan.objects.all()
-#     return render(request, "request_plan.html", {"plans": plans, "show_sidebar":True})
-
-# def purchase_view(request):
-#    return render(request, "purchase.html")
 
 
 # Check if the user is an admin
