@@ -44,13 +44,7 @@ class UserProfile(models.Model):
     total_uploaded_files = models.IntegerField(default=0)  # Tracks the total uploads
     credits_expiry = models.DateTimeField(null=True, blank=True)  # Expiry date field
 
-    # def check_and_expire_credits(self):
-    #     #"""Expire credits if expiry date has passed"""
-    #     if self.credits_expiry and self.credits_expiry < datetime.now():
-    #         self.credits = 0
-    #         self.credits_expiry = None
-    #         self.save()
-            
+
     def __str__(self):
         return f"Profile for {self.user.email}"
 
